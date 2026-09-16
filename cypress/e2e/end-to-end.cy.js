@@ -1,3 +1,5 @@
+const { faker } = require('@faker-js/faker')
+
 describe('Testes End To End do fluxo de cadastro e login', () => {
 
     /* 
@@ -18,11 +20,38 @@ describe('Testes End To End do fluxo de cadastro e login', () => {
     */
 
     beforeEach(() => {
-        // Configurações iniciais, se necessário
+        // Massa de dados fictícia, gerada dinamicamente com Faker para evitar
+        // conflito de e-mail duplicado entre execuções
+        cy.wrap({
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
+            phone: '11987654321',
+            password: faker.internet.password({ length: 10 })
+        }).as('usuario')
     });
 
 
-    it('Deve fazer o cadastro e validar o login com o usuário cadastrado', () => {
-        // Criar todo o fluxo aqui dentro deste único "it"
+    it('Deve fazer o cadastro e validar o login com o usuário cadastrado', function () {
+        // 1. Acessar a página de cadastro
+        cy.visit('/register.html')
+
+        // 2 e 3. Preencher e enviar o formulário de cadastro com dados válidos
+        cy.cadastrarUsuario(this.usuario)
+
+        // Resultado esperado do cadastro
+        cy.get('#alert-container')
+            .should('be.visible')
+            .and('have.class', 'alert-success')
+            .and('contain.text', 'sucesso')
+
+        // 4. Acessar a página de login (sessão limpa, sem aproveitar o login automático do cadastro)
+        cy.clearLocalStorage()
+        cy.visit('/login.html')
+
+        // 5 e 6. Preencher e enviar o login com as credenciais recém-cadastradas
+        cy.login(this.usuario.email, this.usuario.password)
+
+        // Resultado esperado do login
+        cy.url().should('include', '/dashboard.html')
     });
 });

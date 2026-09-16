@@ -31,3 +31,16 @@ Cypress.Commands.add('login', (email, senha) => {
     cy.url().should('include', 'dashboard')
  })
 
+// Preenche e envia o formulário de cadastro com os dados informados
+Cypress.Commands.add('cadastrarUsuario', (usuario) => {
+    cy.get('#name').type(usuario.name)
+    cy.get('#email').type(usuario.email)
+    if (usuario.phone) {
+        cy.get('#phone').type(usuario.phone)
+    }
+    cy.get('#password').type(usuario.password, {log: false})
+    cy.get('#confirm-password').type(usuario.password, {log: false})
+    cy.get('#terms-agreement').check()
+    cy.get('#register-btn').click()
+})
+

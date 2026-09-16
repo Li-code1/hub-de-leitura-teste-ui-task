@@ -52,3 +52,19 @@ Se houver um arquivo exemplo (.env.example), copie para .env e ajuste conforme n
 ## Ajuda / Problemas comuns
 - Atualize dependências: rm -rf node_modules && npm install
 - Verifique a versão do Node.js se algum pacote não compilar.
+
+## Evidência de execução
+
+Teste end-to-end (cadastro + login) rodando com sucesso no Cypress:
+
+**1 de 1 cenário passando (modo interativo):**
+
+![Cenário de cadastro e login passando](docs/evidencia-e2e-1-cenario.jpg)
+
+**Redirecionamento validado para o dashboard após o login:**
+
+![Login realizado e usuário no dashboard](docs/evidencia-e2e-2-dashboard.jpg)
+
+**Execução em modo headless pelo terminal:**
+
+![1 passing no terminal](docs/evidencia-e2e-3-terminal.jpg)
